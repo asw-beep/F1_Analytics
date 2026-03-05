@@ -408,8 +408,48 @@ with col_btn:
 #  RESULTS
 # ════════════════════════════════════════
 if run:
-    with st.spinner("Fetching live race data and running model..."):
-        leaderboard = predict_next_race()
+    # ── Custom GIF loading screen ──
+    loading_slot = st.empty()
+    loading_slot.markdown("""
+    <div style="
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        padding:3rem 1rem;gap:1.5rem;
+        background:#111111;border:1px solid #2E2E2E;border-radius:6px;
+        border-top:3px solid #E8002D;margin-bottom:1rem;
+    ">
+        <img src="https://media.tenor.com/MK2T7YCDUnkAAAAj/picturecross-motorsport.gif"
+             style="width:200px;height:auto;image-rendering:pixelated;" />
+        <div style="text-align:center;">
+            <div style="
+                font-family:'Barlow Condensed',sans-serif;
+                font-size:1.7rem;font-weight:900;font-style:italic;
+                text-transform:uppercase;color:#F5F5F5;letter-spacing:0.04em;
+                margin-bottom:0.35rem;
+            ">Crunching the Data...</div>
+            <div style="
+                font-family:'Barlow',sans-serif;font-size:0.82rem;
+                color:#9E9E9E;letter-spacing:0.1em;text-transform:uppercase;
+            ">Fetching live race data &amp; running model</div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center;margin-top:0.25rem;">
+            <span style="width:9px;height:9px;border-radius:50%;background:#E8002D;
+                animation:f1pulse 1s ease-in-out infinite;display:inline-block;"></span>
+            <span style="width:9px;height:9px;border-radius:50%;background:#E8002D;
+                animation:f1pulse 1s ease-in-out 0.22s infinite;display:inline-block;"></span>
+            <span style="width:9px;height:9px;border-radius:50%;background:#E8002D;
+                animation:f1pulse 1s ease-in-out 0.44s infinite;display:inline-block;"></span>
+        </div>
+    </div>
+    <style>
+    @keyframes f1pulse {
+        0%,100% { opacity:0.2; transform:scale(0.75); }
+        50%      { opacity:1;   transform:scale(1.25); }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    leaderboard = predict_next_race()
+    loading_slot.empty()
 
     race_info = leaderboard.iloc[0]
     winner    = leaderboard.iloc[0]

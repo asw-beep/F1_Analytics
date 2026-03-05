@@ -1,10 +1,6 @@
-import requests
+from api_handler import get_latest_race_dataframe
 
-url = "https://api.jolpi.ca/ergast/f1/2025/last/results.json"
+df = get_latest_race_dataframe()
 
-data = requests.get(url).json()
-
-races = data["MRData"]["RaceTable"]["Races"]
-
-print(len(races))
-print(races[0]["raceName"])
+print(df.head())
+print(df.shape)
