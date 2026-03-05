@@ -1,8 +1,10 @@
+import os
 import pandas as pd
 import joblib
 
-MODEL_PATH = "models/xgboost_f1_model.pkl"
-DATA_PATH = "data/processed/featured_dataset.csv"
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "xgboost_f1_model.pkl")
+DATA_PATH = os.path.join(PROJECT_ROOT, "data", "processed", "featured_dataset.csv")
 
 
 def load_model():
