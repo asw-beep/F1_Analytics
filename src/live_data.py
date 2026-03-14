@@ -1,35 +1,8 @@
-import requests
 import pandas as pd
+from datetime import datetime
+from fastf1_handler import get_latest_race_dataframe
 
 
 def get_latest_completed_race():
-
-    url = "https://api.jolpi.ca/ergast/f1/2025/last/results.json"
-
-    data = requests.get(url).json()
-
-    races = data["MRData"]["RaceTable"]["Races"]
-
-    records = []
-
-    for race in races:
-
-        race_name = race["raceName"]
-        circuit = race["Circuit"]["circuitId"]
-        date = race["date"]
-        year = int(race["season"])
-
-        for result in race["Results"]:
-
-            records.append({
-                "race_name": race_name,
-                "circuitId": circuit,
-                "date": date,
-                "year": year,
-                "driverId": result["Driver"]["driverId"],
-                "constructorId": result["Constructor"]["constructorId"],
-                "grid_position": int(result["grid"]),
-                "finish_position": int(result["position"])
-            })
-
-    return pd.DataFrame(records)
+    """Get the latest completed race results using FastF1"""
+    return get_latest_race_dataframe()

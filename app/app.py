@@ -8,6 +8,10 @@ SRC_DIR = os.path.join(BASE_DIR, "src")
 if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
 
+# Clear Streamlit cache to ensure fresh data
+if 'prediction_cache' not in st.session_state:
+    st.session_state.prediction_cache = None
+
 from predict_next_race import predict_next_race
 
 # ── Page config ────────────────────────────────────────────────────────────────
@@ -480,7 +484,7 @@ if run:
     st.markdown(f"""
     <div class="winner-card">
         <div class="winner-label">&#9632; Pole Position Favourite</div>
-        <div class="winner-name">{winner['driverId']}</div>
+        <div class="winner-name">{winner['driver_display']}</div>
         <div class="winner-prob">{winner['win_probability']:.2%} win probability</div>
     </div>
     """, unsafe_allow_html=True)
@@ -508,7 +512,7 @@ if run:
         "kick_sauber":  "#52E252",
     }
 
-    display_cols = ["driverId", "constructorId", "grid_position", "win_probability"]
+    display_cols = ["driver_display", "constructor_display", "grid_position", "win_probability"]
     df = leaderboard[display_cols].copy().reset_index(drop=True)
     max_prob = df["win_probability"].max()
 
@@ -521,10 +525,10 @@ if run:
         is_winner = (i == 0)
         row_bg    = "background:linear-gradient(90deg,#1a0505 0%,#160303 100%);" if is_winner else "background:#111111;"
         row_border = "border-left:3px solid #E8002D;" if is_winner else "border-left:3px solid transparent;"
-        driver    = row["driverId"].replace("_", " ").upper()
+        driver    = row["driver_display"].upper() if isinstance(row["driver_display"], str) else str(row["driver_display"]).upper()
         medal     = pos_medal(i)
-        c_color   = CONSTRUCTOR_COLORS.get(row["constructorId"].lower(), "#888888")
-        c_label   = row["constructorId"].replace("_", " ").upper()
+        constructor = row["constructor_display"].upper() if isinstance(row["constructor_display"], str) else str(row["constructor_display"]).upper()
+        c_color   = CONSTRUCTOR_COLORS.get(constructor.lower().replace(" ", "_"), "#888888")
         d_color   = "#FFFFFF" if is_winner else "#CCCCCC"
 
         prob      = row["win_probability"]
@@ -539,7 +543,7 @@ if run:
             <td>
                 <span class="team">
                     <span class="team-pip" style="background:{c_color};"></span>
-                    <span style="color:{c_color};">{c_label}</span>
+                    <span style="color:{c_color};">{constructor}</span>
                 </span>
             </td>
             <td class="grid">P{int(row['grid_position'])}</td>

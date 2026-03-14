@@ -6,3 +6,4 @@ xgboost
 requests
 joblib
 altair
+fastf1
