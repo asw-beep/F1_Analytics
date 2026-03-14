@@ -1,4 +1,6 @@
 import fastf1
+fastf1.Cache.enable_cache("./cache")
+fastf1.Cache.clear_cache()
 import pandas as pd
 from datetime import datetime
 import os
