@@ -1,11 +1,9 @@
 import fastf1
-fastf1.Cache.enable_cache("./cache")
-fastf1.Cache.clear_cache()
 import pandas as pd
 from datetime import datetime
 import os
 
-# Set cache directory relative to this file
+# Set cache directory relative to this file (src directory)
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache")
 fastf1.Cache.enable_cache(CACHE_DIR)
 
